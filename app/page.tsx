@@ -655,12 +655,12 @@ setMilestoneRows(milestoneBody);
 
 const pageStyle = {
   position: "relative" as const,
-  padding: "40px",
+  padding: "16px",
   minHeight: "100vh",
   color: "white",
   fontFamily: "Arial",
   background: "#000",
-  overflow: "hidden",
+  overflowX: "hidden" as const,
 };
 
 const glowOne = {
@@ -708,7 +708,7 @@ const badgeStyle = {
 };
 
 const titleStyle = {
-  fontSize: "38px",
+  fontSize: "clamp(30px, 8vw, 38px)",
   maxWidth: "520px",
   lineHeight: 1,
   margin: "18px 0 12px",
@@ -746,7 +746,7 @@ const tableWrap = {
   borderRadius: "16px",
   boxShadow: "0 0 40px rgba(234,179,8,0.08)",
   border: "1px solid rgba(234,179,8,0.15)",
-  padding: "16px",
+  padding: "10px",
 };
 
 const tableStyle = {
@@ -781,7 +781,7 @@ const logoStyle = {
 
 const heroGridStyle = {
   display: "grid",
-  gridTemplateColumns: "1.25fr 0.75fr",
+  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
   gap: "18px",
   alignItems: "stretch",
 };
@@ -809,9 +809,9 @@ const leaderRowStyle = {
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between" as const,
-  gap: "22px",
-  padding: "14px 16px",
-  borderRadius: "22px",
+  gap: "12px",
+  padding: "12px",
+  borderRadius: "18px",
   background: "rgba(255,255,255,0.055)",
   border: "1px solid rgba(255,255,255,0.09)",
 };
@@ -826,16 +826,16 @@ const leaderRankStyle = {
 
 const leaderPlayerNameStyle = {
   color: "#fff",
-  fontSize: "18px",
+  fontSize: "15px",
   fontWeight: 900,
-  lineHeight: 1.1,
-  whiteSpace: "nowrap" as const,
+  lineHeight: 1.15,
+  whiteSpace: "normal" as const,
 };
 
 const leaderTeamStyle = {
-  marginTop: "8px",
+  marginTop: "5px",
   color: "#94a3b8",
-  fontSize: "20px",
+  fontSize: "13px",
 };
 
 const leaderStatsRightStyle = {
@@ -845,7 +845,7 @@ const leaderStatsRightStyle = {
 
 const leaderBpStyle = {
   color: "#facc15",
-  fontSize: "28px",
+  fontSize: "24px",
   fontWeight: 950,
   lineHeight: 1,
 };
@@ -871,8 +871,8 @@ const brandRowStyle = {
 };
 
 const mainLogoStyle = {
-  width: "74px",
-  height: "74px",
+  width: "clamp(54px, 16vw, 74px)",
+  height: "clamp(54px, 16vw, 74px)",
   objectFit: "contain" as const,
   mixBlendMode: "multiply" as const,
   filter: "drop-shadow(0 0 18px rgba(250,204,21,0.35))",
@@ -943,6 +943,8 @@ const categoryFooter = {
 const milestoneHeaderStyle = {
   display: "flex",
   alignItems: "center",
+  justifyContent: "space-between",
+  flexWrap: "wrap" as const,
   gap: "12px",
   marginBottom: "14px",
 };
@@ -1020,12 +1022,12 @@ const milestoneNoticeStyle = {
   alignItems: "center",
   gap: 10,
   padding: "10px 14px",
-  borderRadius: 999,
+  borderRadius: 18,
   background: "rgba(255,255,255,0.05)",
   border: "1px solid rgba(250,204,21,0.18)",
   textDecoration: "none",
   color: "white",
-  minWidth: 340,
+  minWidth: "min(340px, 82vw)",
 };
 
 const milestoneIconStyle = {
