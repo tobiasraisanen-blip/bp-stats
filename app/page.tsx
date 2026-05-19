@@ -90,7 +90,7 @@ const currentMilestoneGroup = milestoneGroups[activeMilestoneGroup];
 useEffect(() => {
   const interval = setInterval(() => {
     setActiveMilestoneGroup((prev) => (prev + 1) % 3);
-  }, 6000);
+  }, 12000);
 
   return () => clearInterval(interval);
 }, []);
