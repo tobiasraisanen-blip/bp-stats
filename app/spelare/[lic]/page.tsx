@@ -330,7 +330,26 @@ careerTotal.avg =
 <section className="mt-6 rounded-3xl border border-yellow-500/30 bg-zinc-950 p-6">
   <h2 className="mb-6 text-2xl font-bold text-yellow-300">
     Karriäröversikt
-  </h2>
+</h2>
+
+<div className="mb-6">
+  <label className="mb-2 block text-sm text-zinc-400">
+    Visa statistik för
+  </label>
+
+  <select
+    value={selectedLeague}
+    onChange={(e) => setSelectedLeague(e.target.value)}
+    className="rounded-xl border border-white/10 bg-zinc-950 px-4 py-3 text-white outline-none"
+  >
+    <option>Elitserien</option>
+    <option>Nordallsvenskan</option>
+    <option>Mellanallsvenskan</option>
+    <option>Sydallsvenskan</option>
+    <option>Total Allsvenskan</option>
+    <option>Total karriär</option>
+  </select>
+</div>
 
   <div className="overflow-x-auto">
     <table className="w-full border-separate border-spacing-y-2 text-left">
