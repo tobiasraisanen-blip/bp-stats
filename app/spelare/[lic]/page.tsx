@@ -71,7 +71,37 @@ const [careerRank, setCareerRank] = useState<any>(null);
   lic: getCell(row, headers, "LIC_ID"),
 }));
 
-const nearMilestones = players
+const milestonePlayers = players.filter((p: any) => {
+  const division = String(p.division || "").toLowerCase();
+
+  if (selectedLeague === "Elitserien") {
+    return division.includes("elitserien");
+  }
+
+  if (selectedLeague === "Nordallsvenskan") {
+    return division.includes("nordallsvenskan");
+  }
+
+  if (selectedLeague === "Mellanallsvenskan") {
+    return division.includes("mellanallsvenskan");
+  }
+
+  if (selectedLeague === "Sydallsvenskan") {
+    return division.includes("sydallsvenskan");
+  }
+
+  if (selectedLeague === "Total Allsvenskan") {
+    return division.includes("allsvenskan");
+  }
+
+  if (selectedLeague === "Total karriär") {
+    return true;
+  }
+
+  return division.includes("elitserien");
+});
+
+const nearMilestones = milestonePlayers
   .map((p: any) => {
     const bp = Number(p.bp || 0);
     const nextBP = Math.floor(bp / 50) * 50 + 50;
