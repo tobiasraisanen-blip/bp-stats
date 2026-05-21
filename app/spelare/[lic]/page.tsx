@@ -38,6 +38,7 @@ export default function PlayerPage({ params }: any) {
  const [careerRows, setCareerRows] = useState<any[]>([]);
 const [careerRank, setCareerRank] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedLeague, setSelectedLeague] = useState("Elitserien");
 
   useEffect(() => {
     async function load() {
@@ -49,6 +50,7 @@ const [careerRank, setCareerRank] = useState<any>(null);
       const rows = data.slice(1);
 
       const players = rows.map((row) => ({
+        division: getCell(row, headers, "Division"),
   rank: getCell(row, headers, "Rank"),
   sasong: getCell(row, headers, "Säsong"),
   spelare: getCell(row, headers, "Spelare"),
@@ -98,12 +100,71 @@ const nearMilestones = players
       const career = players
   .filter((p) => {
     const licFromSheet = String(p.lic || "").trim().toUpperCase();
-    return licFromSheet === licFromUrl;
+    const division = String(p.division || "").toLowerCase();
+
+    if (licFromSheet !== licFromUrl) return false;
+
+    if (selectedLeague === "Elitserien") {
+      return division.includes("elitserien");
+    }
+
+    if (selectedLeague === "Nordallsvenskan") {
+      return division.includes("nordallsvenskan");
+    }
+
+    if (selectedLeague === "Mellanallsvenskan") {
+      return division.includes("mellanallsvenskan");
+    }
+
+    if (selectedLeague === "Sydallsvenskan") {
+      return division.includes("sydallsvenskan");
+    }
+
+    if (selectedLeague === "Total Allsvenskan") {
+      return division.includes("allsvenskan");
+    }
+
+    if (selectedLeague === "Total karriär") {
+      return true;
+    }
+
+    return division.includes("elitserien");
   })
   .sort((a, b) => String(b.sasong).localeCompare(String(a.sasong)));
 
 setCareerRows(career);
-const allTime = players.reduce((acc: any, p: any) => {
+
+const filteredPlayers = players.filter((p: any) => {
+  const division = String(p.division || "").toLowerCase();
+
+  if (selectedLeague === "Elitserien") {
+    return division.includes("elitserien");
+  }
+
+  if (selectedLeague === "Nordallsvenskan") {
+    return division.includes("nordallsvenskan");
+  }
+
+  if (selectedLeague === "Mellanallsvenskan") {
+    return division.includes("mellanallsvenskan");
+  }
+
+  if (selectedLeague === "Sydallsvenskan") {
+    return division.includes("sydallsvenskan");
+  }
+
+  if (selectedLeague === "Total Allsvenskan") {
+    return division.includes("allsvenskan");
+  }
+
+  if (selectedLeague === "Total karriär") {
+    return true;
+  }
+
+  return division.includes("elitserien");
+});
+
+const allTime = filteredPlayers.reduce((acc: any, p: any) => {
   const lic = String(p.lic || "").trim().toUpperCase();
   if (!lic) return acc;
 
