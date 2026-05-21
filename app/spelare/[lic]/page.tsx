@@ -200,7 +200,7 @@ setLoading(false);
     }
 
     load();
-  }, [params.lic]);
+  }, [selectedLeague, params.lic]);
 
   if (loading) {
     return <div className="min-h-screen bg-black p-10 text-white">Laddar...</div>;
