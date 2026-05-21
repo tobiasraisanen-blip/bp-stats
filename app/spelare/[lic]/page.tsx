@@ -370,6 +370,16 @@ careerTotal.avg =
       </thead>
 
       <tbody>
+        {careerRows.length === 0 && (
+  <tr>
+    <td
+      colSpan={11}
+      className="rounded-xl bg-zinc-900/80 px-4 py-8 text-center text-zinc-400"
+    >
+      Ingen statistik hittad för {selectedLeague}
+    </td>
+  </tr>
+)}
 
   <tr className="bg-yellow-500/10 text-white">
     <td className="rounded-l-xl px-4 py-4 font-bold text-yellow-300">
