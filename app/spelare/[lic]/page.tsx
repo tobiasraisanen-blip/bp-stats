@@ -206,16 +206,16 @@ const allTime = filteredPlayers.reduce((acc: any, p: any) => {
     spelare: p.spelare,
     lag: p.lag,
     logo: p.logo,
-    senasteSasong: p.sasong,
+    latestSeason: String(p.sasong || ""),
     bp: 0,
     ser: 0,
   };
 }
 
-if (String(p.sasong).localeCompare(String(acc[lic].senasteSasong)) > 0) {
+if (String(p.sasong || "") > acc[lic].latestSeason) {
   acc[lic].lag = p.lag;
   acc[lic].logo = p.logo;
-  acc[lic].senasteSasong = p.sasong;
+  acc[lic].latestSeason = String(p.sasong || "");
 }
 
   acc[lic].bp += toNumber(p.bp);
