@@ -122,10 +122,6 @@ const nearMilestones = milestonePlayers
         .trim()
         .toUpperCase();
 
-      const found = players.find((p) => {
-        const licFromSheet = String(p.lic || "").trim().toUpperCase();
-        return licFromSheet === licFromUrl;
-      });
 
       const career = players
   .filter((p) => {
@@ -161,6 +157,12 @@ const nearMilestones = milestonePlayers
     return division.includes("elitserien");
   })
   .sort((a, b) => String(b.sasong).localeCompare(String(a.sasong)));
+      const found =
+  career[0] ||
+  players.find((p) => {
+    const licFromSheet = String(p.lic || "").trim().toUpperCase();
+    return licFromSheet === licFromUrl;
+  });
 
 setCareerRows(career);
 
