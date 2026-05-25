@@ -200,14 +200,23 @@ const allTime = filteredPlayers.reduce((acc: any, p: any) => {
   const lic = String(p.lic || "").trim().toUpperCase();
   if (!lic) return acc;
 
-  if (!acc[lic]) {
-    acc[lic] = {
-      lic,
-      spelare: p.spelare,
-      bp: 0,
-      ser: 0,
-    };
-  }
+ if (!acc[lic]) {
+  acc[lic] = {
+    lic,
+    spelare: p.spelare,
+    lag: p.lag,
+    logo: p.logo,
+    senasteSasong: p.sasong,
+    bp: 0,
+    ser: 0,
+  };
+}
+
+if (String(p.sasong).localeCompare(String(acc[lic].senasteSasong)) > 0) {
+  acc[lic].lag = p.lag;
+  acc[lic].logo = p.logo;
+  acc[lic].senasteSasong = p.sasong;
+}
 
   acc[lic].bp += toNumber(p.bp);
   acc[lic].ser += toNumber(p.ser);
