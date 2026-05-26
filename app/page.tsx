@@ -215,10 +215,10 @@ setMilestoneRows(milestoneBody);
       .reduce((acc: any, r: any) => {
         const key = r.lic || r.spelare;
 
-       if (!acc[key]) {
+      if (!acc[key]) {
   acc[key] = {
     ...r,
-    teams: [{ lag: r.lag, logo: r.logo }],
+    teams: [{ lag: r.lag, logo: r.logga }],
     ms: 0,
     ser: 0,
     bp: 0,
@@ -226,14 +226,15 @@ setMilestoneRows(milestoneBody);
     ts: 0,
   };
 }
-        const teamExists = acc[key].teams.some(
+
+const teamExists = acc[key].teams.some(
   (t: any) => t.lag === r.lag
 );
 
 if (!teamExists) {
   acc[key].teams.push({
     lag: r.lag,
-    logo: r.logo,
+    logo: r.logga,
   });
 }
         acc[key].ms += toNumber(r.ms);
