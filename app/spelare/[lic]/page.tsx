@@ -210,14 +210,22 @@ const allTime = filteredPlayers.reduce((acc: any, p: any) => {
   acc[lic] = {
     lic,
     spelare: p.spelare,
-    lag: p.lag,
-    logo: p.logo,
+ teams: [{ lag: p.lag, logo: p.logo }],
     latestSeasonYear: seasonStartYear(p.sasong),
     bp: 0,
     ser: 0,
   };
 }
+const teamExists = acc[lic].teams.some(
+  (t: any) => t.lag === p.lag
+);
 
+if (!teamExists) {
+  acc[lic].teams.push({
+    lag: p.lag,
+    logo: p.logo,
+  });
+}
 if (seasonStartYear(p.sasong) > acc[lic].latestSeasonYear) {
   acc[lic].lag = p.lag;
   acc[lic].logo = p.logo;
