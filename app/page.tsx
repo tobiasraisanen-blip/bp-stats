@@ -647,11 +647,25 @@ if (!teamExists) {
                 </td>
                 <td style={td}>{r.alder}</td>
                 <td style={td}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    {r.logga && <img src={r.logga} alt={r.lag} style={logoStyle} />}
-                    <span>{r.lag}</span>
-                  </div>
-                </td>
+  {mode === "All Time" && r.teams ? (
+    <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
+      {r.teams.map((team: any) => (
+        <img
+          key={team.lag}
+          src={team.logo}
+          alt={team.lag}
+          title={team.lag}
+          style={logoStyle}
+        />
+      ))}
+    </div>
+  ) : (
+    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      {r.logga && <img src={r.logga} alt={r.lag} style={logoStyle} />}
+      <span>{r.lag}</span>
+    </div>
+  )}
+</td>
                 <td style={td}>{r.ms}</td>
                 <td style={td}>{r.ser}</td>
                 <td style={{ ...td, color: "#facc15", fontWeight: 900 }}>{r.bp}</td>
