@@ -228,7 +228,7 @@ setMilestoneRows(milestoneBody);
 }
 
 const teamExists = acc[key].teams.some(
-  (t: any) => t.lag === r.lag
+  (t: any) => t.logo === r.logga
 );
 
 if (!teamExists) {
