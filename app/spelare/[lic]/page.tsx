@@ -32,7 +32,13 @@ function toNumber(value: any) {
       .replace(",", ".")
   );
 }
+function seasonStartYear(sasong: string) {
+  const match = String(sasong || "").match(/(\d{2})\/\d{2}/);
+  if (!match) return 0;
 
+  const yy = Number(match[1]);
+  return yy > 50 ? 1900 + yy : 2000 + yy;
+}
 export default function PlayerPage({ params }: any) {
   const [player, setPlayer] = useState<any>(null);
  const [careerRows, setCareerRows] = useState<any[]>([]);
@@ -206,16 +212,16 @@ const allTime = filteredPlayers.reduce((acc: any, p: any) => {
     spelare: p.spelare,
     lag: p.lag,
     logo: p.logo,
-    latestSeason: String(p.sasong || ""),
+    latestSeasonYear: seasonStartYear(p.sasong),
     bp: 0,
     ser: 0,
   };
 }
 
-if (String(p.sasong || "") > acc[lic].latestSeason) {
+if (seasonStartYear(p.sasong) > acc[lic].latestSeasonYear) {
   acc[lic].lag = p.lag;
   acc[lic].logo = p.logo;
-  acc[lic].latestSeason = String(p.sasong || "");
+  acc[lic].latestSeasonYear = seasonStartYear(p.sasong);
 }
 
   acc[lic].bp += toNumber(p.bp);
