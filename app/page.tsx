@@ -199,7 +199,7 @@ setMilestoneRows(milestoneBody);
   return r.division === aktivDivision;
 })
   .filter((r) => {
-    const aktivSasong = sasong === "Alla" ? "Säsong 25/26" : sasong;
+    const aktivSasong = sasong === "Alla" ? "Säsong 26/27" : sasong;
     return r.sasong === aktivSasong;
   })
   .filter((r) => lag === "Alla" || r.lag === lag)
