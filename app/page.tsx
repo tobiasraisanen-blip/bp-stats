@@ -261,7 +261,7 @@ if (!teamExists) {
   const activeHeroDivision = heroDivisions[heroIndex];
 
   const heroRows = rows
-    .filter((r) => r.sasong === "Säsong 25/26")
+    .filter((r) => r.sasong === "Säsong 26/27")
     .filter((r) => r.division === activeHeroDivision);
 
   const displayRows = mode === "All Time" ? allTimeRows : filteredRows;
