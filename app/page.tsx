@@ -625,7 +625,9 @@ if (!teamExists) {
             <tr style={theadRow}>
               <th>Rank</th>
               <th>Spelare</th>
-              <th>Ålder</th>
+              <th style={{ width: "42px", paddingLeft: "2px", paddingRight: "4px" }}>
+  Ålder
+</th>
               <th>Lag</th>
               <th>MS</th>
               <th>SER</th>
@@ -646,7 +648,16 @@ if (!teamExists) {
                     {r.spelare}
                   </a>
                 </td>
-                <td style={td}>{r.alder}</td>
+                <td
+  style={{
+    ...td,
+    width: "42px",
+    paddingLeft: "2px",
+    paddingRight: "4px",
+  }}
+>
+  {r.alder}
+</td>
                 <td style={td}>
   {mode === "All Time" && r.teams ? (
     <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
