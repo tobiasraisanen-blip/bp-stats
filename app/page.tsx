@@ -784,7 +784,8 @@ const tableWrap = {
 const tableStyle = {
   width: "100%",
   borderCollapse: "collapse" as const,
-  minWidth: "900px",
+  minWidth: "760px",
+  fontSize: "13px",
 };
 
 const theadRow = {
@@ -794,7 +795,8 @@ const theadRow = {
 };
 
 const td = {
-  padding: "14px 8px",
+  padding: "9px 5px",
+  whiteSpace: "nowrap" as const,
 };
 
 const playerLink = {
@@ -803,8 +805,8 @@ const playerLink = {
 };
 
 const logoStyle = {
-  width: "28px",
-  height: "28px",
+  width: "22px",
+  height: "22px",
   objectFit: "contain" as const,
   borderRadius: "4px",
   background: "white",
