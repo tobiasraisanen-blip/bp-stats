@@ -793,7 +793,7 @@ const tableWrap = {
 };
 
 const tableStyle = {
-  width: "100%",
+  width: "auto",
   borderCollapse: "collapse" as const,
   minWidth: "760px",
   fontSize: "13px",
