@@ -643,7 +643,7 @@ if (!teamExists) {
             {displayRows.map((r: any, i: number) => (
               <tr key={i} style={{ borderBottom: "1px solid #1e293b" }}>
                 <td style={td}>{r.rank}</td>
-                <td style={{ ...td, fontWeight: "bold" }}>
+                <td style={{ ...td, fontWeight: "bold", width: "190px" }}>
                   <a href={`/spelare/${encodeURIComponent(r.lic)}`} style={playerLink}>
                     {r.spelare}
                   </a>
