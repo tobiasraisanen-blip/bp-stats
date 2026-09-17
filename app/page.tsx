@@ -252,6 +252,47 @@ if (!teamExists) {
 
   const displayRows = mode === "All Time" ? allTimeRows : filteredRows;
 
+  const handleSort = (key: string) => {
+    if (sortKey === key) {
+      setSortDirection((prev) => (prev === "desc" ? "asc" : "desc"));
+    } else {
+      setSortKey(key);
+      setSortDirection("desc");
+    }
+  };
+
+  const sortArrow = (key: string) => {
+    if (sortKey !== key) return "";
+    return sortDirection === "desc" ? " ↓" : " ↑";
+  };
+
+  const numericSortKeys = new Set([
+    "rank",
+    "alder",
+    "ms",
+    "ser",
+    "bp",
+    "bps",
+    "hs",
+    "ts",
+    "avg",
+  ]);
+
+  const sortedDisplayRows = [...displayRows].sort((a: any, b: any) => {
+    if (!sortKey) return 0;
+
+    if (numericSortKeys.has(sortKey)) {
+      const aValue = toNumber(a[sortKey]);
+      const bValue = toNumber(b[sortKey]);
+      return sortDirection === "desc" ? bValue - aValue : aValue - bValue;
+    }
+
+    const aValue = String(a[sortKey] || "");
+    const bValue = String(b[sortKey] || "");
+    const comparison = aValue.localeCompare(bValue, "sv", { sensitivity: "base" });
+    return sortDirection === "desc" ? -comparison : comparison;
+  });
+
   const careerMilestoneRows = Object.values(
     rows.reduce((acc: any, r: any) => {
       const key = r.lic || r.spelare;
