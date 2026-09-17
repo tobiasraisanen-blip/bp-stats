@@ -363,15 +363,48 @@ if (!teamExists) {
 
       .bp-table th:nth-child(2),
       .bp-table td:nth-child(2) {
-        width: auto !important;
-        max-width: 145px;
+        width: 38% !important;
+        max-width: 38vw;
         overflow: hidden;
         text-overflow: ellipsis;
       }
 
       .bp-table th:nth-child(4),
       .bp-table td:nth-child(4) {
-        max-width: 130px;
+        width: 32% !important;
+        max-width: 32vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .bp-table th:nth-child(7),
+      .bp-table td:nth-child(7) {
+        width: 15% !important;
+        min-width: 46px;
+        text-align: right;
+      }
+
+      .bp-table th:nth-child(8),
+      .bp-table td:nth-child(8) {
+        width: 15% !important;
+        min-width: 48px;
+        text-align: right;
+      }
+
+      .bp-table td:nth-child(4) > div {
+        gap: 4px !important;
+      }
+
+      .bp-table td:nth-child(4) img {
+        width: 18px !important;
+        height: 18px !important;
+        flex-shrink: 0;
+      }
+
+      .bp-table td:nth-child(4) span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
 
