@@ -332,6 +332,10 @@ if (!teamExists) {
   <style>{`
 
     @media (max-width: 700px) {
+      .milestones-mobile-hide {
+        display: none !important;
+      }
+
       .desktop-points-table {
         display: none;
       }
@@ -408,7 +412,7 @@ if (!teamExists) {
 
   
 
-<section style={rotatingmilestoneSectionStyle}>
+<section className="milestones-mobile-hide" style={rotatingmilestoneSectionStyle}>
   <div style={milestoneHeaderStyle}>
     <div>
       <div style={milestoneTitleStyle}>
