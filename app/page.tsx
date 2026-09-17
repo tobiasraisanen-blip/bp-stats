@@ -418,66 +418,7 @@ if (!teamExists) {
 
   
 
-      <section style={categoryGrid}>
-        <div style={categoryCard}>
-          <div style={categoryTitle}>Top 3 HS</div>
-
-          {topHS.map((r: any, i: number) => (
-            <a
-              key={(r.lic || r.spelare) + "hs"}
-              href={`/spelare/${encodeURIComponent(r.lic)}`}
-              style={{ ...categoryRow, textDecoration: "none", color: "white" }}
-            >
-              <div style={categoryRank}>#{i + 1}</div>
-              <div style={{ flex: 1 }}>
-                <div style={categoryPlayer}>{r.spelare}</div>
-                <div style={categoryTeam}>{r.lag}</div>
-              </div>
-              <div style={categoryValue}>{r.hs}</div>
-            </a>
-          ))}
-        </div>
-
-        <div style={categoryCard}>
-          <div style={categoryTitle}>Top 3 AVG</div>
-
-          {topAVG.map((r: any, i: number) => (
-            <a
-              key={(r.lic || r.spelare) + "avg"}
-              href={`/spelare/${encodeURIComponent(r.lic)}`}
-              style={{ ...categoryRow, textDecoration: "none", color: "white" }}
-            >
-              <div style={categoryRank}>#{i + 1}</div>
-              <div style={{ flex: 1 }}>
-                <div style={categoryPlayer}>{r.spelare}</div>
-                <div style={categoryTeam}>{r.lag}</div>
-              </div>
-              <div style={categoryValue}>{r.avg}</div>
-            </a>
-          ))}
-
-          <div style={categoryFooter}>Minst 20 serier spelade</div>
-        </div>
-
-        <div style={categoryCard}>
-          <div style={categoryTitle}>Top 3 TS</div>
-
-          {topTS.map((r: any, i: number) => (
-            <a
-              key={(r.lic || r.spelare) + "ts"}
-              href={`/spelare/${encodeURIComponent(r.lic)}`}
-              style={{ ...categoryRow, textDecoration: "none", color: "white" }}
-            >
-              <div style={categoryRank}>#{i + 1}</div>
-              <div style={{ flex: 1 }}>
-                <div style={categoryPlayer}>{r.spelare}</div>
-                <div style={categoryTeam}>{r.lag}</div>
-              </div>
-              <div style={categoryValue}>{r.ts}</div>
-            </a>
-          ))}
-        </div>
-      </section>
+  
 
 <section style={rotatingmilestoneSectionStyle}>
   <div style={milestoneHeaderStyle}>
@@ -611,16 +552,18 @@ if (!teamExists) {
         </select>
 
         <input
-          type="text"
-          placeholder="Sök spelare..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={selectStyle}
-        />
-      </div>
+  type="text"
+  placeholder="Sök spelare..."
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+  style={selectStyle}
+/>
+</div>
 
-      <div style={tableWrap}>
-        <table style={tableStyle}>
+<div style={statsGridStyle}>
+
+  <div style={tableWrap}>
+    <table style={tableStyle}>
           <thead>
             <tr style={theadRow}>
               <th>Rank</th>
@@ -692,7 +635,42 @@ if (!teamExists) {
           </tbody>
         </table>
       </div>
-    </main>
+
+      <section style={categoryGrid}>
+        <div style={categoryCard}>
+          <div style={categoryTitle}>Top 3 HS</div>
+          {topHS.map((r: any, i: number) => (
+            <a key={(r.lic || r.spelare) + "hs"} href={`/spelare/${encodeURIComponent(r.lic)}`} style={{ ...categoryRow, textDecoration: "none", color: "white" }}>
+              <div style={categoryRank}>#{i + 1}</div>
+              <div style={{ flex: 1 }}><div style={categoryPlayer}>{r.spelare}</div><div style={categoryTeam}>{r.lag}</div></div>
+              <div style={categoryValue}>{r.hs}</div>
+            </a>
+          ))}
+        </div>
+        <div style={categoryCard}>
+          <div style={categoryTitle}>Top 3 AVG</div>
+          {topAVG.map((r: any, i: number) => (
+            <a key={(r.lic || r.spelare) + "avg"} href={`/spelare/${encodeURIComponent(r.lic)}`} style={{ ...categoryRow, textDecoration: "none", color: "white" }}>
+              <div style={categoryRank}>#{i + 1}</div>
+              <div style={{ flex: 1 }}><div style={categoryPlayer}>{r.spelare}</div><div style={categoryTeam}>{r.lag}</div></div>
+              <div style={categoryValue}>{r.avg}</div>
+            </a>
+          ))}
+          <div style={categoryFooter}>Minst 20 serier spelade</div>
+        </div>
+        <div style={categoryCard}>
+          <div style={categoryTitle}>Top 3 TS</div>
+          {topTS.map((r: any, i: number) => (
+            <a key={(r.lic || r.spelare) + "ts"} href={`/spelare/${encodeURIComponent(r.lic)}`} style={{ ...categoryRow, textDecoration: "none", color: "white" }}>
+              <div style={categoryRank}>#{i + 1}</div>
+              <div style={{ flex: 1 }}><div style={categoryPlayer}>{r.spelare}</div><div style={categoryTeam}>{r.lag}</div></div>
+              <div style={categoryValue}>{r.ts}</div>
+            </a>
+          ))}
+        </div>
+      </section>
+    </div>
+  </main>
   );
 }
 
@@ -781,6 +759,13 @@ const selectStyle = {
   border: "1px solid #334155",
   borderRadius: "10px",
   fontSize: "16px",
+};
+
+const statsGridStyle = {
+  display: "grid",
+  gridTemplateColumns: "minmax(760px, auto) minmax(260px, 1fr)",
+  gap: "16px",
+  alignItems: "start",
 };
 
 const tableWrap = {
@@ -925,9 +910,10 @@ const mainLogoStyle = {
 
 const categoryGrid = {
   display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-  gap: "16px",
-  marginTop: "18px",
+  gridTemplateColumns: "1fr",
+  gap: "10px",
+  marginTop: "0px",
+  minWidth: "260px",
 };
 
 const categoryCard = {
