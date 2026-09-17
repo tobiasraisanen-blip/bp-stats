@@ -752,6 +752,7 @@ if (!teamExists) {
 
 const pageStyle = {
   position: "relative" as const,
+  touchAction: "pan-y" as const,
   padding: "16px",
   minHeight: "100vh",
   color: "white",
@@ -1046,6 +1047,8 @@ const milestoneTabActiveStyle = {
 
 const milestoneListStyle = {
   display: "flex",
+  touchAction: "pan-y" as const,
+  overscrollBehaviorX: "contain" as const,
   gap: 12,
   overflowX: "auto" as const,
   paddingBottom: 4,
