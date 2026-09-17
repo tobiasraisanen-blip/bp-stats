@@ -250,6 +250,8 @@ if (!teamExists) {
     .sort((a: any, b: any) => Number(b.bp) - Number(a.bp))
     .map((r: any, i: number) => ({ ...r, rank: i + 1 }));
 
+  const displayRows = mode === "All Time" ? allTimeRows : filteredRows;
+
   const careerMilestoneRows = Object.values(
     rows.reduce((acc: any, r: any) => {
       const key = r.lic || r.spelare;
