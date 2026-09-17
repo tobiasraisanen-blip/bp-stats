@@ -332,17 +332,6 @@ if (!teamExists) {
   <style>{`
 
     @media (max-width: 700px) {
-      html, body {
-        overflow-y: auto !important;
-        overscroll-behavior-y: auto;
-        touch-action: manipulation;
-      }
-
-      .mobile-points-list,
-      .mobile-points-list a {
-        touch-action: pan-y;
-      }
-
       .desktop-points-table {
         display: none;
       }
@@ -768,7 +757,7 @@ const pageStyle = {
   color: "white",
   fontFamily: "Arial",
   background: "#000",
-  overflowX: "hidden" as const,
+  overflowX: "clip" as const,
 };
 
 const glowOne = {
@@ -1057,9 +1046,6 @@ const milestoneTabActiveStyle = {
 
 const milestoneListStyle = {
   display: "flex",
-  WebkitOverflowScrolling: "touch" as const,
-  overscrollBehaviorX: "contain" as const,
-  overscrollBehaviorY: "auto" as const,
   gap: 12,
   overflowX: "auto" as const,
   paddingBottom: 4,
