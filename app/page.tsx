@@ -83,6 +83,8 @@ const [milestoneRows, setMilestoneRows] = useState<any[]>([]);
   const [mode, setMode] = useState("Säsong");
   const [heroIndex, setHeroIndex] = useState(0);
   const [search, setSearch] = useState("");
+  const [sortKey, setSortKey] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
 const [activeMilestoneGroup, setActiveMilestoneGroup] = useState(0);
 const milestoneGroups = getMilestoneGroupsFromEvents(milestoneRows);
 const currentMilestoneGroup = milestoneGroups[activeMilestoneGroup];
@@ -265,6 +267,36 @@ if (!teamExists) {
     .filter((r) => r.division === activeHeroDivision);
 
   const displayRows = mode === "All Time" ? allTimeRows : filteredRows;
+
+  const handleSort = (key: string) => {
+    if (sortKey === key) {
+      setSortDirection((prev) => (prev === "desc" ? "asc" : "desc"));
+    } else {
+      setSortKey(key);
+      setSortDirection(key === "spelare" || key === "lag" ? "asc" : "desc");
+    }
+  };
+
+  const numericSortKeys = new Set(["rank", "alder", "ms", "ser", "bp", "bps", "hs", "ts", "avg"]);
+
+  const sortedDisplayRows = sortKey
+    ? [...displayRows].sort((a: any, b: any) => {
+        if (numericSortKeys.has(sortKey)) {
+          const aValue = toNumber(a[sortKey]);
+          const bValue = toNumber(b[sortKey]);
+          return sortDirection === "desc" ? bValue - aValue : aValue - bValue;
+        }
+
+        const aValue = String(a[sortKey] || "").toLocaleLowerCase("sv-SE");
+        const bValue = String(b[sortKey] || "").toLocaleLowerCase("sv-SE");
+        const result = aValue.localeCompare(bValue, "sv-SE");
+        return sortDirection === "desc" ? -result : result;
+      })
+    : displayRows;
+
+  const sortArrow = (key: string) =>
+    sortKey === key ? (sortDirection === "desc" ? " ↓" : " ↑") : "";
+
   const top3 = heroRows.length > 0 ? heroRows.slice(0, 3) : displayRows.slice(0, 3);
 
   const topHS = [...heroRows]
@@ -560,116 +592,60 @@ if (!teamExists) {
 />
 </div>
 
-<div style={statsGridStyle}>
-
-  <div style={tableWrap}>
+<div style={tableWrap}>
     <table style={tableStyle}>
-          <thead>
-            <tr style={theadRow}>
-              <th>Rank</th>
-              <th>Spelare</th>
-              <th style={{ width: "42px", paddingLeft: "2px", paddingRight: "4px" }}>
-  Ålder
-</th>
-              <th>Lag</th>
-              <th>MS</th>
-              <th>SER</th>
-              <th>BP</th>
-              <th>BP/s</th>
-              <th>HS</th>
-<th>TS</th>
-              <th>AVG</th>
-            </tr>
-          </thead>
+      <thead>
+        <tr style={theadRow}>
+          <th onClick={() => handleSort("rank")} style={sortableTh}>Rank{sortArrow("rank")}</th>
+          <th onClick={() => handleSort("spelare")} style={sortableTh}>Spelare{sortArrow("spelare")}</th>
+          <th onClick={() => handleSort("alder")} style={{ ...sortableTh, width: "42px", paddingLeft: "2px", paddingRight: "4px" }}>Ålder{sortArrow("alder")}</th>
+          <th onClick={() => handleSort("lag")} style={sortableTh}>Lag{sortArrow("lag")}</th>
+          <th onClick={() => handleSort("ms")} style={sortableTh}>MS{sortArrow("ms")}</th>
+          <th onClick={() => handleSort("ser")} style={sortableTh}>SER{sortArrow("ser")}</th>
+          <th onClick={() => handleSort("bp")} style={sortableTh}>BP{sortArrow("bp")}</th>
+          <th onClick={() => handleSort("bps")} style={sortableTh}>BP/s{sortArrow("bps")}</th>
+          <th onClick={() => handleSort("hs")} style={sortableTh}>HS{sortArrow("hs")}</th>
+          <th onClick={() => handleSort("ts")} style={sortableTh}>TS{sortArrow("ts")}</th>
+          <th onClick={() => handleSort("avg")} style={sortableTh}>AVG{sortArrow("avg")}</th>
+        </tr>
+      </thead>
 
-          <tbody>
-            {displayRows.map((r: any, i: number) => (
-              <tr key={i} style={{ borderBottom: "1px solid #1e293b" }}>
-                <td style={td}>{r.rank}</td>
-                <td style={{ ...td, fontWeight: "bold", width: "190px" }}>
-                  <a href={`/spelare/${encodeURIComponent(r.lic)}`} style={playerLink}>
-                    {r.spelare}
-                  </a>
-                </td>
-                <td
-  style={{
-    ...td,
-    width: "42px",
-    paddingLeft: "2px",
-    paddingRight: "4px",
-  }}
->
-  {r.alder}
-</td>
-                <td style={td}>
-  {mode === "All Time" && r.teams ? (
-    <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-      {r.teams.map((team: any) => (
-        <img
-          key={team.lag}
-          src={team.logo}
-          alt={team.lag}
-          title={team.lag}
-          style={logoStyle}
-        />
-      ))}
-    </div>
-  ) : (
-    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-      {r.logga && <img src={r.logga} alt={r.lag} style={logoStyle} />}
-      <span>{r.lag}</span>
-    </div>
-  )}
-</td>
-                <td style={td}>{r.ms}</td>
-                <td style={td}>{r.ser}</td>
-                <td style={{ ...td, color: "#facc15", fontWeight: 900 }}>{r.bp}</td>
-                <td style={td}>{r.bps}</td>
-                <td style={td}>{r.hs}</td>
-<td>
-  {Number((r?.ts || "").toString().replace(/\s/g, "") || 0).toLocaleString("sv-SE")}
-</td>
-                <td style={td}>{r.avg}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <section style={categoryGrid}>
-        <div style={categoryCard}>
-          <div style={categoryTitle}>Top 3 HS</div>
-          {topHS.map((r: any, i: number) => (
-            <a key={(r.lic || r.spelare) + "hs"} href={`/spelare/${encodeURIComponent(r.lic)}`} style={{ ...categoryRow, textDecoration: "none", color: "white" }}>
-              <div style={categoryRank}>#{i + 1}</div>
-              <div style={{ flex: 1 }}><div style={categoryPlayer}>{r.spelare}</div><div style={categoryTeam}>{r.lag}</div></div>
-              <div style={categoryValue}>{r.hs}</div>
-            </a>
-          ))}
-        </div>
-        <div style={categoryCard}>
-          <div style={categoryTitle}>Top 3 AVG</div>
-          {topAVG.map((r: any, i: number) => (
-            <a key={(r.lic || r.spelare) + "avg"} href={`/spelare/${encodeURIComponent(r.lic)}`} style={{ ...categoryRow, textDecoration: "none", color: "white" }}>
-              <div style={categoryRank}>#{i + 1}</div>
-              <div style={{ flex: 1 }}><div style={categoryPlayer}>{r.spelare}</div><div style={categoryTeam}>{r.lag}</div></div>
-              <div style={categoryValue}>{r.avg}</div>
-            </a>
-          ))}
-          <div style={categoryFooter}>Minst 20 serier spelade</div>
-        </div>
-        <div style={categoryCard}>
-          <div style={categoryTitle}>Top 3 TS</div>
-          {topTS.map((r: any, i: number) => (
-            <a key={(r.lic || r.spelare) + "ts"} href={`/spelare/${encodeURIComponent(r.lic)}`} style={{ ...categoryRow, textDecoration: "none", color: "white" }}>
-              <div style={categoryRank}>#{i + 1}</div>
-              <div style={{ flex: 1 }}><div style={categoryPlayer}>{r.spelare}</div><div style={categoryTeam}>{r.lag}</div></div>
-              <div style={categoryValue}>{r.ts}</div>
-            </a>
-          ))}
-        </div>
-      </section>
-    </div>
+      <tbody>
+        {sortedDisplayRows.map((r: any, i: number) => (
+          <tr key={r.lic || i} style={{ borderBottom: "1px solid #1e293b" }}>
+            <td style={td}>{r.rank}</td>
+            <td style={{ ...td, fontWeight: "bold", width: "190px" }}>
+              <a href={`/spelare/${encodeURIComponent(r.lic)}`} style={playerLink}>
+                {r.spelare}
+              </a>
+            </td>
+            <td style={{ ...td, width: "42px", paddingLeft: "2px", paddingRight: "4px" }}>{r.alder}</td>
+            <td style={td}>
+              {mode === "All Time" && r.teams ? (
+                <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
+                  {r.teams.map((team: any) => (
+                    <img key={team.lag} src={team.logo} alt={team.lag} title={team.lag} style={logoStyle} />
+                  ))}
+                </div>
+              ) : (
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  {r.logga && <img src={r.logga} alt={r.lag} style={logoStyle} />}
+                  <span>{r.lag}</span>
+                </div>
+              )}
+            </td>
+            <td style={td}>{r.ms}</td>
+            <td style={td}>{r.ser}</td>
+            <td style={{ ...td, color: "#facc15", fontWeight: 900 }}>{r.bp}</td>
+            <td style={td}>{r.bps}</td>
+            <td style={td}>{r.hs}</td>
+            <td style={td}>{Number((r?.ts || "").toString().replace(/\s/g, "") || 0).toLocaleString("sv-SE")}</td>
+            <td style={td}>{r.avg}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
   </main>
   );
 }
@@ -788,6 +764,12 @@ const theadRow = {
   color: "#94a3b8",
   textAlign: "left" as const,
   borderBottom: "1px solid #334155",
+};
+
+const sortableTh = {
+  cursor: "pointer",
+  userSelect: "none" as const,
+  whiteSpace: "nowrap" as const,
 };
 
 const td = {
