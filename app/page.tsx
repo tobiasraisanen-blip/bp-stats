@@ -332,79 +332,12 @@ if (!teamExists) {
   <style>{`
 
     @media (max-width: 700px) {
-      .bp-table th:nth-child(1),
-      .bp-table td:nth-child(1),
-      .bp-table th:nth-child(3),
-      .bp-table td:nth-child(3),
-      .bp-table th:nth-child(5),
-      .bp-table td:nth-child(5),
-      .bp-table th:nth-child(6),
-      .bp-table td:nth-child(6),
-      .bp-table th:nth-child(9),
-      .bp-table td:nth-child(9),
-      .bp-table th:nth-child(10),
-      .bp-table td:nth-child(10),
-      .bp-table th:nth-child(11),
-      .bp-table td:nth-child(11) {
+      .desktop-points-table {
         display: none;
       }
 
-      .bp-table {
-        width: 100% !important;
-        min-width: 0 !important;
-        table-layout: auto;
-      }
-
-      .bp-table th,
-      .bp-table td {
-        padding: 9px 4px !important;
-        font-size: 12px;
-      }
-
-      .bp-table th:nth-child(2),
-      .bp-table td:nth-child(2) {
-        width: 38% !important;
-        max-width: 38vw;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .bp-table th:nth-child(4),
-      .bp-table td:nth-child(4) {
-        width: 32% !important;
-        max-width: 32vw;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .bp-table th:nth-child(7),
-      .bp-table td:nth-child(7) {
-        width: 15% !important;
-        min-width: 46px;
-        text-align: right;
-      }
-
-      .bp-table th:nth-child(8),
-      .bp-table td:nth-child(8) {
-        width: 15% !important;
-        min-width: 48px;
-        text-align: right;
-      }
-
-      .bp-table td:nth-child(4) > div {
-        gap: 4px !important;
-      }
-
-      .bp-table td:nth-child(4) img {
-        width: 18px !important;
-        height: 18px !important;
-        flex-shrink: 0;
-      }
-
-      .bp-table td:nth-child(4) span {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+      .mobile-points-list {
+        display: block !important;
       }
     }
 
@@ -615,8 +548,8 @@ if (!teamExists) {
 />
 </div>
 
-<div style={tableWrap}>
-    <table className="bp-table" style={tableStyle}>
+<div className="desktop-points-table" style={tableWrap}>
+    <table style={tableStyle}>
       <thead>
         <tr style={theadRow}>
           <th onClick={() => handleSort("rank")} style={sortableTh}>Rank{sortArrow("rank")}</th>
@@ -668,6 +601,150 @@ if (!teamExists) {
         ))}
       </tbody>
     </table>
+  </div>
+
+  <div className="mobile-points-list" style={{ display: "none", marginTop: "8px" }}>
+    {sortedDisplayRows.map((r: any, i: number) => {
+      const mobileStats = [
+        ["MS", r.ms],
+        ["SER", r.ser],
+        ["BP", r.bp],
+        ["BP/s", r.bps],
+        ["HS", r.hs],
+        ["TS", Number((r?.ts || "").toString().replace(/\s/g, "") || 0).toLocaleString("sv-SE")],
+        ["AVG", r.avg],
+      ];
+
+      return (
+        <a
+          key={r.lic || i}
+          href={`/spelare/${encodeURIComponent(r.lic)}`}
+          style={{
+            display: "block",
+            padding: "10px 10px 9px",
+            marginBottom: "5px",
+            border: "1px solid rgba(255,255,255,0.06)",
+            borderRadius: "12px",
+            color: "white",
+            textDecoration: "none",
+            background: "linear-gradient(135deg, rgba(15,23,42,0.92), rgba(2,6,23,0.92))",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              minWidth: 0,
+              marginBottom: "8px",
+            }}
+          >
+            <span
+              style={{
+                color: "#facc15",
+                fontWeight: 950,
+                fontSize: "12px",
+                flexShrink: 0,
+              }}
+            >
+              #{r.rank}
+            </span>
+
+            <span
+              style={{
+                fontWeight: 900,
+                fontSize: "14px",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {r.spelare}
+            </span>
+
+            <span style={{ color: "#475569", flexShrink: 0 }}>•</span>
+
+            {r.logga && (
+              <img
+                src={r.logga}
+                alt=""
+                style={{
+                  width: "16px",
+                  height: "16px",
+                  objectFit: "contain",
+                  borderRadius: "3px",
+                  background: "white",
+                  padding: "1px",
+                  flexShrink: 0,
+                }}
+              />
+            )}
+
+            <span
+              style={{
+                color: "#94a3b8",
+                fontSize: "12px",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {r.lag}
+            </span>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(7, minmax(0, 1fr))",
+              gap: "2px",
+              alignItems: "center",
+            }}
+          >
+            {mobileStats.map(([label, value]) => (
+              <div
+                key={label}
+                style={{
+                  minWidth: 0,
+                  textAlign: "center",
+                  padding: "4px 1px",
+                  borderRadius: "7px",
+                  background:
+                    label === "BP"
+                      ? "rgba(250,204,21,0.10)"
+                      : "rgba(255,255,255,0.025)",
+                }}
+              >
+                <div
+                  style={{
+                    color: label === "BP" ? "#facc15" : "#64748b",
+                    fontSize: "8px",
+                    fontWeight: 900,
+                    letterSpacing: "0.15px",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {label}
+                </div>
+                <div
+                  style={{
+                    marginTop: "2px",
+                    color: label === "BP" ? "#facc15" : "#e2e8f0",
+                    fontSize: label === "TS" ? "10px" : "11px",
+                    fontWeight: label === "BP" ? 950 : 800,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {value}
+                </div>
+              </div>
+            ))}
+          </div>
+        </a>
+      );
+    })}
   </div>
   </main>
   );
