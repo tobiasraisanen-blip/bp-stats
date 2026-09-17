@@ -81,7 +81,6 @@ const [milestoneRows, setMilestoneRows] = useState<any[]>([]);
   const [sasong, setSasong] = useState("Alla");
   const [lag, setLag] = useState("Alla");
   const [mode, setMode] = useState("Säsong");
-  const [heroIndex, setHeroIndex] = useState(0);
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
@@ -157,14 +156,6 @@ setMilestoneRows(milestoneBody);
     }
 
     loadData();
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setHeroIndex((prev) => (prev === 0 ? 1 : 0));
-    }, 5000);
-
-    return () => clearInterval(interval);
   }, []);
 
   const divisions = [
@@ -258,62 +249,6 @@ if (!teamExists) {
     )
     .sort((a: any, b: any) => Number(b.bp) - Number(a.bp))
     .map((r: any, i: number) => ({ ...r, rank: i + 1 }));
-
-  const heroDivisions = ["Elitserien (H)", "Elitserien (D)"];
-  const activeHeroDivision = heroDivisions[heroIndex];
-
-  const heroRows = rows
-    .filter((r) => r.sasong === "Säsong 26/27")
-    .filter((r) => r.division === activeHeroDivision);
-
-  const displayRows = mode === "All Time" ? allTimeRows : filteredRows;
-
-  const handleSort = (key: string) => {
-    if (sortKey === key) {
-      setSortDirection((prev) => (prev === "desc" ? "asc" : "desc"));
-    } else {
-      setSortKey(key);
-      setSortDirection(key === "spelare" || key === "lag" ? "asc" : "desc");
-    }
-  };
-
-  const numericSortKeys = new Set(["rank", "alder", "ms", "ser", "bp", "bps", "hs", "ts", "avg"]);
-
-  const sortedDisplayRows = sortKey
-    ? [...displayRows].sort((a: any, b: any) => {
-        if (numericSortKeys.has(sortKey)) {
-          const aValue = toNumber(a[sortKey]);
-          const bValue = toNumber(b[sortKey]);
-          return sortDirection === "desc" ? bValue - aValue : aValue - bValue;
-        }
-
-        const aValue = String(a[sortKey] || "").toLocaleLowerCase("sv-SE");
-        const bValue = String(b[sortKey] || "").toLocaleLowerCase("sv-SE");
-        const result = aValue.localeCompare(bValue, "sv-SE");
-        return sortDirection === "desc" ? -result : result;
-      })
-    : displayRows;
-
-  const sortArrow = (key: string) =>
-    sortKey === key ? (sortDirection === "desc" ? " ↓" : " ↑") : "";
-
-  const top3 = heroRows.length > 0 ? heroRows.slice(0, 3) : displayRows.slice(0, 3);
-
-  const topHS = [...heroRows]
-    .sort((a: any, b: any) => toNumber(b.hs) - toNumber(a.hs))
-    .slice(0, 3);
-
-  const MIN_SERIES_FOR_AVG = 20;
-
-  const topAVG = [...heroRows]
-    .filter((r: any) => toNumber(r.ser) >= MIN_SERIES_FOR_AVG)
-    .sort((a: any, b: any) => toNumber(b.avg) - toNumber(a.avg))
-    .slice(0, 3);
-
-  const topTS = [...heroRows]
-    .filter((r: any) => toNumber(r.ts) > 0)
-    .sort((a: any, b: any) => toNumber(b.ts) - toNumber(a.ts))
-    .slice(0, 3);
 
   const careerMilestoneRows = Object.values(
     rows.reduce((acc: any, r: any) => {
@@ -413,39 +348,6 @@ if (!teamExists) {
           </div>
         </div>
 
-        <div style={leaderPanelStyle}>
-          <div style={{ color: "#94a3b8", fontSize: "14px" }}>
-            Aktuell ledare • {activeHeroDivision}
-          </div>
-
-          <div style={leaderListStyle}>
-            {top3.map((r: any) => (
-              <a
-                key={r.lic || r.spelare}
-                href={`/spelare/${encodeURIComponent(r.lic)}`}
-                style={{ ...leaderRowStyle, textDecoration: "none", color: "white" }}
-              >
-                <div style={leaderRankStyle}>#{r.rank}</div>
-
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={leaderPlayerNameStyle}>{r.spelare}</div>
-                  <div style={leaderTeamStyle}>{r.lag}</div>
-                </div>
-
-                <div style={leaderStatsRightStyle}>
-                  <div>
-                    <span style={leaderBpStyle}>{r.bp}</span>
-                    <span style={leaderBpLabelStyle}> BP</span>
-                  </div>
-
-                  <div style={leaderBpsStyle}>
-                    {String(r.bps).replace(".", ",")} BP/s
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
       </section>
 
   
@@ -796,83 +698,6 @@ const heroGridStyle = {
   gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
   gap: "18px",
   alignItems: "stretch",
-};
-
-const leaderPanelStyle = {
-  position: "relative" as const,
-  borderRadius: "28px",
-  border: "1px solid rgba(250,204,21,0.22)",
-  background: "rgba(15,23,42,0.82)",
-  padding: "22px",
-  boxShadow: "0 0 50px rgba(250,204,21,0.08)",
-  display: "flex",
-  flexDirection: "column" as const,
-  justifyContent: "center",
-  gap: "18px",
-};
-
-const leaderListStyle = {
-  display: "flex",
-  flexDirection: "column" as const,
-  gap: "16px",
-};
-
-const leaderRowStyle = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between" as const,
-  gap: "12px",
-  padding: "12px",
-  borderRadius: "18px",
-  background: "rgba(255,255,255,0.055)",
-  border: "1px solid rgba(255,255,255,0.09)",
-};
-
-const leaderRankStyle = {
-  width: "52px",
-  color: "#facc15",
-  fontSize: "28px",
-  fontWeight: 950,
-  lineHeight: 1,
-};
-
-const leaderPlayerNameStyle = {
-  color: "#fff",
-  fontSize: "15px",
-  fontWeight: 900,
-  lineHeight: 1.15,
-  whiteSpace: "normal" as const,
-};
-
-const leaderTeamStyle = {
-  marginTop: "5px",
-  color: "#94a3b8",
-  fontSize: "13px",
-};
-
-const leaderStatsRightStyle = {
-  minWidth: "82px",
-  textAlign: "right" as const,
-};
-
-const leaderBpStyle = {
-  color: "#facc15",
-  fontSize: "24px",
-  fontWeight: 950,
-  lineHeight: 1,
-};
-
-const leaderBpLabelStyle = {
-  color: "#facc15",
-  fontSize: "18px",
-  fontWeight: 900,
-};
-
-const leaderBpsStyle = {
-  marginTop: "8px",
-  color: "#94a3b8",
-  fontSize: "18px",
-  fontWeight: 500,
 };
 
 const brandRowStyle = {
