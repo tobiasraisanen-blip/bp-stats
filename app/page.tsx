@@ -330,6 +330,51 @@ if (!teamExists) {
   return (
     <main style={pageStyle}>
   <style>{`
+
+    @media (max-width: 700px) {
+      .bp-table th:nth-child(1),
+      .bp-table td:nth-child(1),
+      .bp-table th:nth-child(3),
+      .bp-table td:nth-child(3),
+      .bp-table th:nth-child(5),
+      .bp-table td:nth-child(5),
+      .bp-table th:nth-child(6),
+      .bp-table td:nth-child(6),
+      .bp-table th:nth-child(9),
+      .bp-table td:nth-child(9),
+      .bp-table th:nth-child(10),
+      .bp-table td:nth-child(10),
+      .bp-table th:nth-child(11),
+      .bp-table td:nth-child(11) {
+        display: none;
+      }
+
+      .bp-table {
+        width: 100% !important;
+        min-width: 0 !important;
+        table-layout: auto;
+      }
+
+      .bp-table th,
+      .bp-table td {
+        padding: 9px 4px !important;
+        font-size: 12px;
+      }
+
+      .bp-table th:nth-child(2),
+      .bp-table td:nth-child(2) {
+        width: auto !important;
+        max-width: 145px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .bp-table th:nth-child(4),
+      .bp-table td:nth-child(4) {
+        max-width: 130px;
+      }
+    }
+
     @keyframes milestoneSlideIn {
       from {
         opacity: 0;
@@ -538,7 +583,7 @@ if (!teamExists) {
 </div>
 
 <div style={tableWrap}>
-    <table style={tableStyle}>
+    <table className="bp-table" style={tableStyle}>
       <thead>
         <tr style={theadRow}>
           <th onClick={() => handleSort("rank")} style={sortableTh}>Rank{sortArrow("rank")}</th>
