@@ -79,7 +79,7 @@ export default function FantasyPage() {
             <div style={styles.badge}>BP FANTASY</div>
             <h1 style={styles.h1}>Bygg ditt lag.</h1>
             <p style={styles.lead}>
-              Välj 8 spelare från Elitserien. Du startar med 50,0 mkr och får välja max 2 spelare från samma klubb.
+              Bygg ditt Fantasy-lag med spelare från Elitserien. Du startar med 50,0 mkr och får välja max 2 spelare från samma klubb.
             </p>
           </div>
           <div style={styles.deadline}>
@@ -100,9 +100,17 @@ export default function FantasyPage() {
             <div style={styles.panelHeader}>
               <div>
                 <div style={styles.eyebrow}>MITT LAG</div>
-                <h2 style={styles.h2}>{selected.length === 8 ? "Laget är fullt" : `Välj ${8 - selected.length} spelare till`}</h2>
+                <h2 style={styles.h2}>{selected.length === 8 ? "8/8 – laget är komplett" : `${selected.length}/8 valda · ${8 - selected.length} platser kvar`}</h2>
               </div>
-              <button onClick={() => setSelectedIds([])} style={styles.ghostButton}>Rensa</button>
+              <button
+                disabled={selected.length === 0}
+                onClick={() => {
+                  if (window.confirm("Vill du rensa hela laget?")) setSelectedIds([]);
+                }}
+                style={{ ...styles.ghostButton, opacity: selected.length === 0 ? 0.45 : 1 }}
+              >
+                Rensa hela laget
+              </button>
             </div>
 
             <div style={styles.squad}>
