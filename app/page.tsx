@@ -5,6 +5,9 @@ import { useEffect, useState } from "react";
 const CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRAXxwepsRlEzuR8GJ_-YEx_FbktEV4IojiHjhalKcd6knuvnIDrKca-fVa8RCrYREdWv3xn5pdx6jB/pub?gid=1638446153&single=true&output=csv";
 
+const ALL_TIME_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRAXxwepsRlEzuR8GJ_-YEx_FbktEV4IojiHjhalKcd6knuvnIDrKca-fVa8RCrYREdWv3xn5pdx6jB/pub?gid=826524187&single=true&output=csv";
+
 const BP_LOGO =
   "https://lh3.googleusercontent.com/d/1MHq5fYm4qg0_fNR3JUV0aWTGZsulXaNm";
 
@@ -77,6 +80,7 @@ function getMilestoneGroupsFromEvents(events: any[]) {
 export default function Home() {
   const [rows, setRows] = useState<any[]>([]);
 const [milestoneRows, setMilestoneRows] = useState<any[]>([]);
+  const [allTimeRowsSource, setAllTimeRowsSource] = useState<any[]>([]);
   const [division, setDivision] = useState("Alla");
   const [sasong, setSasong] = useState("Alla");
   const [lag, setLag] = useState("Alla");
@@ -133,6 +137,41 @@ useEffect(() => {
         trend: row[headers.indexOf("Trend")],
         lic: row[headers.indexOf("LIC_ID")],
       }));
+
+      const allTimeRes = await fetch(ALL_TIME_CSV_URL);
+      const allTimeText = await allTimeRes.text();
+      const allTimeData = parseCSV(allTimeText);
+
+      // All Time-bladet har filter/rubrikrader före själva tabellen.
+      const allTimeHeaderIndex = allTimeData.findIndex(
+        (row) => row.includes("Rank") && row.includes("Spelare") && row.includes("BP")
+      );
+
+      if (allTimeHeaderIndex >= 0) {
+        const allTimeHeaders = allTimeData[allTimeHeaderIndex].map((h) => h.trim());
+
+        const allTimeBody = allTimeData
+          .slice(allTimeHeaderIndex + 1)
+          .filter((row) => row[allTimeHeaders.indexOf("Spelare")])
+          .map((row) => ({
+            rank: row[allTimeHeaders.indexOf("Rank")],
+            spelare: row[allTimeHeaders.indexOf("Spelare")],
+            lag: row[allTimeHeaders.indexOf("Lag")],
+            ms: row[allTimeHeaders.indexOf("MS")],
+            ser: row[allTimeHeaders.indexOf("SER")],
+            bp: row[allTimeHeaders.indexOf("BP")],
+            bps: row[allTimeHeaders.indexOf("BP/s")],
+            hs: row[allTimeHeaders.indexOf("HS")],
+            ts: row[allTimeHeaders.indexOf("TS")],
+            avg: row[allTimeHeaders.indexOf("AVG")],
+            p300: row[allTimeHeaders.indexOf("300")],
+            p1000: row[allTimeHeaders.indexOf("1000")],
+            trend: row[allTimeHeaders.indexOf("All Time Trend")],
+            lic: "",
+          }));
+
+        setAllTimeRowsSource(allTimeBody);
+      }
 
       setRows(body);
 const milestoneRes = await fetch(MILESTONES_CSV_URL);
@@ -201,56 +240,35 @@ setMilestoneRows(milestoneBody);
       .toLowerCase()
       .includes(search.toLowerCase())
   );
-  const allTimeRows = Object.values(
-    rows
-      .filter((r) => division === "Alla" || r.division === division)
-      .filter((r) => lag === "Alla" || r.lag === lag)
-      .reduce((acc: any, r: any) => {
-        const key = r.lic || r.spelare;
-
-      if (!acc[key]) {
-  acc[key] = {
-    ...r,
-    teams: [{ lag: r.lag, logo: r.logga }],
-    ms: 0,
-    ser: 0,
-    bp: 0,
-    hs: 0,
-    ts: 0,
-  };
-}
-
-const teamExists = acc[key].teams.some(
-  (t: any) => t.logo === r.logga
-);
-
-if (!teamExists) {
-  acc[key].teams.push({
-    lag: r.lag,
-    logo: r.logga,
-  });
-}
-        acc[key].ms += toNumber(r.ms);
-        acc[key].ser += toNumber(r.ser);
-        acc[key].bp += toNumber(r.bp);
-        acc[key].ts += toNumber(r.ts);
-        acc[key].hs = Math.max(toNumber(acc[key].hs), toNumber(r.hs));
-
-        return acc;
-      }, {})
-  )
-    .map((r: any) => ({
-      ...r,
-      bps: r.ser > 0 ? (r.bp / r.ser).toFixed(2) : "0.00",
-      avg: r.ser > 0 ? (r.ts / r.ser).toFixed(2) : "0.00",
-    }))
+  const allTimeRows = allTimeRowsSource
+    .filter((r: any) => lag === "Alla" || r.lag === lag)
     .filter((r: any) =>
       String(r.spelare || "").toLowerCase().includes(search.toLowerCase())
-    )
-    .sort((a: any, b: any) => Number(b.bp) - Number(a.bp))
-    .map((r: any, i: number) => ({ ...r, rank: i + 1 }));
+    );
 
   const displayRows = mode === "All Time" ? allTimeRows : filteredRows;
+
+  const renderRankingTrend = (value: any) => {
+    const raw = String(value ?? "").trim();
+    if (!raw) return null;
+
+    if (raw.toUpperCase() === "NY" || raw.toUpperCase() === "NEW") {
+      return <span style={{ color: "#facc15", fontWeight: 900, marginLeft: "6px" }}>NY</span>;
+    }
+
+    const n = Number(raw.replace("+", "").replace(",", "."));
+    if (Number.isNaN(n)) return null;
+
+    if (n > 0) {
+      return <span style={{ color: "#22c55e", fontWeight: 900, marginLeft: "6px" }}>↑{n}</span>;
+    }
+
+    if (n < 0) {
+      return <span style={{ color: "#ef4444", fontWeight: 900, marginLeft: "6px" }}>↓{Math.abs(n)}</span>;
+    }
+
+    return <span style={{ color: "#64748b", fontWeight: 900, marginLeft: "6px" }}>→</span>;
+  };
 
   const handleSort = (key: string) => {
     if (sortKey === key) {
@@ -573,7 +591,7 @@ if (!teamExists) {
       <tbody>
         {sortedDisplayRows.map((r: any, i: number) => (
           <tr key={r.lic || i} style={{ borderBottom: "1px solid #1e293b" }}>
-            <td style={td}>{r.rank}</td>
+            <td style={td}>{r.rank}{renderRankingTrend(r.trend)}</td>
             <td style={{ ...td, fontWeight: "bold", width: "190px" }}>
               <a href={`/spelare/${encodeURIComponent(r.lic)}`} style={playerLink}>
                 {r.spelare}
