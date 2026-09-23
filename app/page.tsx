@@ -5,9 +5,8 @@ import { useEffect, useState } from "react";
 const CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRAXxwepsRlEzuR8GJ_-YEx_FbktEV4IojiHjhalKcd6knuvnIDrKca-fVa8RCrYREdWv3xn5pdx6jB/pub?gid=1638446153&single=true&output=csv";
 
-const ALL_TIME_CSV_URL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRAXxwepsRlEzuR8GJ_-YEx_FbktEV4IojiHjhalKcd6knuvnIDrKca-fVa8RCrYREdWv3xn5pdx6jB/pub?gid=826524187&single=true&output=csv";
-
+  const ALL_TIME_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRAXxwepsRlEzuR8GJ_-YEx_FbktEV4IojiHjhalKcd6knuvnIDrKca-fVa8RCrYREdWv3xn5pdx6jB/pub?gid=1774579841&single=true&output=csv";
 const BP_LOGO =
   "https://lh3.googleusercontent.com/d/1MHq5fYm4qg0_fNR3JUV0aWTGZsulXaNm";
 
