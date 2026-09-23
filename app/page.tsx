@@ -150,11 +150,12 @@ useEffect(() => {
         const allTimeHeaders = allTimeData[allTimeHeaderIndex].map((h) => h.trim());
 
         const allTimeBody = allTimeData
-          .slice(allTimeHeaderIndex + 1)
-          .filter((row) => row[allTimeHeaders.indexOf("Spelare")])
-          .map((row) => ({
-            rank: row[allTimeHeaders.indexOf("Rank")],
-            spelare: row[allTimeHeaders.indexOf("Spelare")],
+  .slice(allTimeHeaderIndex + 1)
+  .filter((row) => row[allTimeHeaders.indexOf("Spelare")])
+  .map((row) => ({
+    division: row[allTimeHeaders.indexOf("Division")],
+    rank: row[allTimeHeaders.indexOf("Rank")],
+    spelare: row[allTimeHeaders.indexOf("Spelare")],
             lag: row[allTimeHeaders.indexOf("Lag")],
             ms: row[allTimeHeaders.indexOf("MS")],
             ser: row[allTimeHeaders.indexOf("SER")],
@@ -240,10 +241,14 @@ setMilestoneRows(milestoneBody);
       .includes(search.toLowerCase())
   );
   const allTimeRows = allTimeRowsSource
-    .filter((r: any) => lag === "Alla" || r.lag === lag)
-    .filter((r: any) =>
-      String(r.spelare || "").toLowerCase().includes(search.toLowerCase())
-    );
+  .filter((r: any) => {
+    const aktivDivision = division === "Alla" ? "Elitserien (H)" : division;
+    return r.division === aktivDivision;
+  })
+  .filter((r: any) => lag === "Alla" || r.lag === lag)
+  .filter((r: any) =>
+    String(r.spelare || "").toLowerCase().includes(search.toLowerCase())
+  );
 
   const displayRows = mode === "All Time" ? allTimeRows : filteredRows;
 
