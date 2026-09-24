@@ -161,7 +161,6 @@ export default function RekordPage() {
 
         if (diff !== 0) return diff;
 
-        // Stabil sekundär sortering vid lika resultat
         if (b.bp !== a.bp) return b.bp - a.bp;
 
         return a.spelare.localeCompare(b.spelare, "sv");
@@ -180,29 +179,144 @@ export default function RekordPage() {
   }
 
   return (
-    <main style={pageStyle}>
+    <main className="record-page" style={pageStyle}>
+      <style>{`
+        @media (max-width: 700px) {
+          .record-page {
+            padding: 8px !important;
+          }
+
+          .record-hero {
+            padding: 16px !important;
+            border-radius: 18px !important;
+          }
+
+          .record-brand {
+            gap: 10px !important;
+          }
+
+          .record-logo {
+            width: 52px !important;
+            height: 52px !important;
+          }
+
+          .record-title {
+            font-size: 27px !important;
+            margin-top: 5px !important;
+          }
+
+          .record-subtitle {
+            font-size: 12px !important;
+          }
+
+          .record-controls {
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 8px !important;
+            margin-top: 16px !important;
+          }
+
+          .record-controls a,
+          .record-controls select {
+            width: 100% !important;
+            box-sizing: border-box !important;
+          }
+
+          .record-controls a {
+            text-align: center !important;
+          }
+
+          .record-intro {
+            margin-top: 18px !important;
+            margin-bottom: 10px !important;
+          }
+
+          .record-section-title {
+            font-size: 20px !important;
+          }
+
+          .record-grid {
+            grid-template-columns: minmax(0, 1fr) !important;
+            gap: 10px !important;
+          }
+
+          .record-card {
+            border-radius: 14px !important;
+          }
+
+          .record-card-header {
+            padding: 12px !important;
+          }
+
+          .record-category-icon {
+            width: 34px !important;
+            height: 34px !important;
+            font-size: 17px !important;
+          }
+
+          .record-list {
+            padding: 4px 8px 8px !important;
+          }
+
+          .record-row {
+            gap: 6px !important;
+            padding: 9px 4px !important;
+          }
+
+          .record-first {
+            padding: 10px 7px !important;
+          }
+
+          .record-rank {
+            width: 29px !important;
+            font-size: 11px !important;
+          }
+
+          .record-player {
+            font-size: 12px !important;
+          }
+
+          .record-meta {
+            font-size: 9px !important;
+          }
+
+          .record-value {
+            font-size: 16px !important;
+          }
+
+          .record-value-label {
+            font-size: 8px !important;
+          }
+        }
+      `}</style>
+
       <div style={glowOne} />
       <div style={glowTwo} />
 
-      <header style={heroStyle}>
-        <div style={brandRowStyle}>
+      <header className="record-hero" style={heroStyle}>
+        <div className="record-brand" style={brandRowStyle}>
           <img
             src={BP_LOGO}
             alt="BP Stats"
+            className="record-logo"
             style={logoStyle}
             referrerPolicy="no-referrer"
           />
 
           <div>
             <div style={badgeStyle}>BP STATS</div>
-            <h1 style={titleStyle}>Rekordboken</h1>
-            <p style={subtitleStyle}>
+
+            <h1 className="record-title" style={titleStyle}>
+              Rekordboken
+            </h1>
+
+            <p className="record-subtitle" style={subtitleStyle}>
               De främsta prestationerna sedan statistiken började.
             </p>
           </div>
         </div>
 
-        <div style={controlsStyle}>
+        <div className="record-controls" style={controlsStyle}>
           <a href="/" style={backButtonStyle}>
             ← Poängligan
           </a>
@@ -225,10 +339,16 @@ export default function RekordPage() {
         <div style={messageStyle}>Laddar rekord...</div>
       ) : (
         <>
-          <section style={introStyle}>
+          <section className="record-intro" style={introStyle}>
             <div>
               <div style={eyebrowStyle}>ALL TIME</div>
-              <h2 style={sectionTitleStyle}>{division}</h2>
+
+              <h2
+                className="record-section-title"
+                style={sectionTitleStyle}
+              >
+                {division}
+              </h2>
             </div>
 
             <div style={historyStyle}>
@@ -236,29 +356,51 @@ export default function RekordPage() {
             </div>
           </section>
 
-          <section style={recordGridStyle}>
+          <section className="record-grid" style={recordGridStyle}>
             {categories.map((category) => {
               const top8 = getTop8(category);
 
               return (
-                <article key={category.key} style={cardStyle}>
-                  <div style={cardHeaderStyle}>
-                    <div style={categoryIconStyle}>{category.icon}</div>
+                <article
+                  key={category.key}
+                  className="record-card"
+                  style={cardStyle}
+                >
+                  <div
+                    className="record-card-header"
+                    style={cardHeaderStyle}
+                  >
+                    <div
+                      className="record-category-icon"
+                      style={categoryIconStyle}
+                    >
+                      {category.icon}
+                    </div>
 
                     <div>
-                      <div style={cardTitleStyle}>{category.title}</div>
+                      <div style={cardTitleStyle}>
+                        {category.title}
+                      </div>
+
                       <div style={cardSubtitleStyle}>
                         {category.subtitle}
                       </div>
                     </div>
                   </div>
 
-                  <div style={listStyle}>
+                  <div className="record-list" style={listStyle}>
                     {top8.length === 0 ? (
-                      <div style={emptyStyle}>Ingen statistik ännu</div>
+                      <div style={emptyStyle}>
+                        Ingen statistik ännu
+                      </div>
                     ) : (
                       top8.map((r, index) => (
                         <a
+                          className={
+                            index === 0
+                              ? "record-row record-first"
+                              : "record-row"
+                          }
                           key={`${category.key}-${r.lic}-${r.sasong}-${index}`}
                           href={
                             r.lic
@@ -270,8 +412,13 @@ export default function RekordPage() {
                             ...(index === 0 ? firstPlaceStyle : {}),
                           }}
                         >
-                          <div style={rankStyle}>
-                            {index === 0 ? "🥇" : `#${index + 1}`}
+                          <div
+                            className="record-rank"
+                            style={rankStyle}
+                          >
+                            {index === 0
+                              ? "🥇"
+                              : `#${index + 1}`}
                           </div>
 
                           <div style={playerAreaStyle}>
@@ -284,24 +431,40 @@ export default function RekordPage() {
                                 />
                               )}
 
-                              <span style={playerStyle}>{r.spelare}</span>
+                              <span
+                                className="record-player"
+                                style={playerStyle}
+                              >
+                                {r.spelare}
+                              </span>
                             </div>
 
-                            <div style={metaStyle}>
+                            <div
+                              className="record-meta"
+                              style={metaStyle}
+                            >
                               {r.lag}
-                              {r.sasong ? ` • ${r.sasong}` : ""}
+                              {r.sasong
+                                ? ` • ${r.sasong}`
+                                : ""}
                             </div>
                           </div>
 
                           <div style={valueAreaStyle}>
-                            <div style={valueStyle}>
+                            <div
+                              className="record-value"
+                              style={valueStyle}
+                            >
                               {formatValue(
                                 category,
                                 toNumber(r[category.key])
                               )}
                             </div>
 
-                            <div style={valueLabelStyle}>
+                            <div
+                              className="record-value-label"
+                              style={valueLabelStyle}
+                            >
                               {category.label}
                             </div>
                           </div>
@@ -463,7 +626,8 @@ const recordGridStyle = {
   maxWidth: "1250px",
   margin: "0 auto",
   display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(330px, 1fr))",
+  gridTemplateColumns:
+    "repeat(auto-fit, minmax(330px, 1fr))",
   gap: "14px",
 };
 
