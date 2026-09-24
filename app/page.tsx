@@ -499,21 +499,44 @@ setMilestoneRows(milestoneBody);
 </div>
 </section>
 
-      <div style={{ display: "flex", gap: "10px", marginTop: "28px" }}>
-        <button onClick={() => setMode("Säsong")} style={buttonStyle(mode === "Säsong")}>
-          Säsong
-        </button>
+      <div
+  style={{
+    display: "flex",
+    gap: "10px",
+    marginTop: "28px",
+    flexWrap: "wrap",
+  }}
+>
+  <button
+    onClick={() => setMode("Säsong")}
+    style={buttonStyle(mode === "Säsong")}
+  >
+    Säsong
+  </button>
 
-        <button
-          onClick={() => {
-            setMode("All Time");
-            setSasong("Alla");
-          }}
-          style={buttonStyle(mode === "All Time")}
-        >
-          All Time
-        </button>
-      </div>
+  <button
+    onClick={() => {
+      setMode("All Time");
+      setSasong("Alla");
+    }}
+    style={buttonStyle(mode === "All Time")}
+  >
+    All Time
+  </button>
+
+  <a
+    href="/rekord"
+    style={{
+      ...buttonStyle(false),
+      textDecoration: "none",
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+    }}
+  >
+    🏆 Rekord
+  </a>
+</div>
 
       <h2 style={{ fontSize: "22px", marginTop: "28px" }}>
         Poängliga – {mode}
